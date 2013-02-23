@@ -1,4 +1,9 @@
-import winsound, serial
+import serial
+from pygame import mixer
+
+mixer.init()
+ping=mixer.Sound("ping.wav")
+buzzer=mixer.Sound("buzzer.wav")
 
 def matchCow(cow):
 	f = open('cattle.txt')
@@ -16,7 +21,7 @@ def countList():
 			pass
 	return str(i + 1)
 
-ser = serial.Serial(1, 9600, timeout=0.1)
+ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=0.1)
 while ser:
 	line = ser.readline().decode('ascii').strip()
 	if line != '':
@@ -25,9 +30,8 @@ while ser:
 			f.write(line + "\n")
 			f.close()
 			print(line + ' added to file')
-			winsound.PlaySound("ping.wav",winsound.SND_FILENAME)
+			ping.play()
 		else:
-			winsound.PlaySound("buzzer.wav",winsound.SND_FILENAME)
+			buzzer.play()
 		print(countList() + " cattle on list\n")
 ser.close()
-
